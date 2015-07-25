@@ -1,0 +1,83 @@
+body {
+/*  font-size: 1.5em;
+  line-height: 2em;*/
+  background-color: gray;
+}
+.output{
+  float: left;
+}
+#cursor {
+  width: 30px;
+  height: 30px;
+  position: fixed;
+  margin-left: -50px;
+  margin-top: -50px;
+  z-index: 910;
+  opacity: 0.5;
+
+  background: black;
+  border-radius: 100%;
+  background: -webkit-radial-gradient(100px 100px, circle, #5cabff, #000);
+  background: -moz-radial-gradient(100px 100px, circle, #5cabff, #000);
+  background: radial-gradient(100px 100px, circle, #5cabff, #000);
+}
+
+.load-button{
+  padding: 1em;
+  margin: auto;
+  background-color: gray;
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 1px;
+  font-size: 1em;
+}
+.load-button:hover{
+  background-color:#CCCCCC;
+  border-color: black;
+  border-radius: 2px;
+  border-style: solid;
+}
+
+.load-buttonWrap{
+  text-align: center;
+  float: left;
+  padding:10px 10px 10px 10px;
+}
+.container-div{
+  padding:1% 5% 0% 5%;
+}
+.workspace-div{
+  float: right;
+  width: 60%;
+  height: 100%;
+  min-height: 700px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+}
+.image-div{
+
+  width: 25%;
+  float: left;
+  background-color: #666666;
+  border-radius: 1px;
+  padding: 0.5% 1% 0.5% 1%;
+}
+.img{
+
+}
+.img:hover{
+  size:"150x150";
+}
+.image-span{
+  
+}
+.left{
+  float: left;
+}
+.right{
+  float: right;
+}
+.hidden{
+  display: none;
+}
