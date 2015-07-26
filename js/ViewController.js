@@ -11,15 +11,14 @@ function ViewController () {
   }
 
   self.loadImages = function(element) {
-    if( element.id === "load-buttonWrap" || element.id === "load-button" ){
       $('#load-buttonWrap').hide(10);
       $('.image-div').show(300);
       $('.image-span').show(300);
-      return true;
-    }
-    return false;
   }
 
+  self.rotate = function() {
+    console.log("ROtating");
+  }
   function updateCursorPosition (x, y) {
     cursor.css({
       left: x + 'px',
