@@ -2,38 +2,28 @@
 
 function ViewController () {
   window.cursor = $('#cursor');
-  window.output = $('#output');
+
 
   var self = this;
-  var outputContent = null;
 
-  function outputDebugInfo (el, hand){
-    if(el){
-      outputContent += '<br>Topmost element: '+ el.tagName + ' #' + el.id +  ' .' + el.className;
-      outputContent += '<br> Has the class we\'re looking for ' + (el.id === 'load-button');
+  self.render = function (data) {
+    updateCursorPosition(data['coordData']['x'], data['coordData']['y']);
+  }
+
+  self.loadImages = function(element) {
+    if( element.id === "load-buttonWrap" || element.id === "load-button" ){
+      $('#load-buttonWrap').hide(10);
+      $('.image-div').show(300);
+      $('.image-span').show(300);
+      return true;
     }
+    return false;
+  }
 
-    outputContent += '<br> Are we grabbing shit?' + hand.grabStrength;
-    outputContent += '<br> Are we pinching shit?' + hand.pinchStrength;
-  };
-
-  self.updateOutput = function(data) {
-    var hand = data['hand'];
-    var element = data['element'];
-    var coordData = data['coordData'];
-    var cursorPosition = data['cursorPosition'];
-
-    outputContent = "x: " + (coordData['x']) + 'px' +
-       "        <br/>y: " + (coordData['y']) + 'px' +
-       "        <br/>z: " + (coordData['z']) + 'px';
-
-    outputDebugInfo(element, hand);
-
+  function updateCursorPosition (x, y) {
     cursor.css({
-      left: cursorPosition['left'] + 'px',
-      top:  cursorPosition['top'] + 'px'
+      left: x + 'px',
+      top:  y + 'px'
     });
-
-    output.html(outputContent);
   };
 }
