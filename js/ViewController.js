@@ -10,7 +10,7 @@ function ViewController () {
     updateCursorPosition(data['coordData']['x'], data['coordData']['y']);
   }
 
-  self.loadImages = function(element) {
+  self.loadImages = function() {
       $('#load-buttonWrap').hide(10);
       $('.image-div').show(300);
       $('.image-span').show(300);

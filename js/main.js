@@ -21,28 +21,31 @@ $(function(){
 
       var screenPosition = findScreenPosition(lefthand, righthand);
       // hide and show the cursor in order to get second-topmost element.
-      cursor.hide();
-      var el = document.elementFromPoint(
-        screenPosition[0],
-        screenPosition[1]
-      );
-      cursor.show();
-
+      if(screenPosition){
+        cursor.hide();
+        var el = document.elementFromPoint(
+          screenPosition[0],
+          screenPosition[1]
+        );
+        cursor.show();
+        var coordData = { 'x' : screenPosition[0].toPrecision(4),
+                  'y' : screenPosition[1].toPrecision(4),
+                  'z' : screenPosition[2].toPrecision(4) };
+      }
         if(!imagesLoaded && openGesture(lefthand, righthand)){
-          imagesLoaded = viewController.loadImages(el);
+          viewController.loadImages(el);
+          imagesLoaded = !imagesLoaded;
         }
 
-        else {
+        else if (imagesLoaded) {
           if(el){
-            if(pinch()){
-
+            if(pinch(lefthand)){
+              console.log("Selecting")
             }
           }
         }
 
-      var coordData = { 'x' : screenPosition[0].toPrecision(4),
-                        'y' : screenPosition[1].toPrecision(4),
-                        'z' : screenPosition[2].toPrecision(4) };
+
       viewController.render({ 'coordData' : coordData,
                               'element'   : el });
       logger.updateLogOutput({ 'coordData'  : coordData,
@@ -62,7 +65,7 @@ $(function(){
 
   function openGesture(lefthand, righthand) {
     if(!lefthand || !righthand) return false;
-    if(lefthand.roll()  > 1 && righthand.roll() > 1){
+    if(lefthand.roll()  > 1 && righthand.roll() < 1){
       return true;
     }
     return false;
@@ -77,7 +80,7 @@ $(function(){
     }
   }
 
-  function pinch () {
-    
+  function pinch (lefthand) {
+    return lefthand.pinchStrength > 0.5;
   }
 });
