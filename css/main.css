@@ -1,10 +1,16 @@
 body {
-/*  font-size: 1.5em;
-  line-height: 2em;*/
-  background-color: gray;
+  background-color: #666666;
+}
+.container-div{
+  padding:1% 5% 0% 5%;
+    /*background-color: #CCCCCC;*/
 }
 .output{
   float: left;
+  position: absolute;
+  top:80%;
+  left :5%;
+
 }
 #cursor {
   width: 30px;
@@ -43,41 +49,30 @@ body {
   float: left;
   padding:10px 10px 10px 10px;
 }
-.container-div{
-  padding:1% 5% 0% 5%;
-}
+
 .workspace-div{
   float: right;
-  width: 60%;
+  width: 65%;
   height: 100%;
   min-height: 700px;
   background-color: white;
+  border-radius: 3px;
   border-style: solid;
   border-width: 1px;
 }
 .image-div{
-
-  width: 25%;
+  width: 20%;
+  max-width: 20%;
   float: left;
-  background-color: #666666;
+  background-color: #333333;
   border-radius: 1px;
-  padding: 0.5% 1% 0.5% 1%;
+  padding: 0.5% 1% 0.5% 2%;
+  opacity: 50%;
 }
-.img{
-
-}
-.img:hover{
-  size:"150x150";
+.image-thumbnail{
+  width:100px;
+  height:100px;
 }
 .image-span{
-  
-}
-.left{
-  float: left;
-}
-.right{
-  float: right;
-}
-.hidden{
-  display: none;
+  margin: 0% 1% 0% 1%;
 }
