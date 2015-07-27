@@ -24,9 +24,14 @@ function LeapLogger () {
     var element   = data['element'];
     var coordData = data['coordData'];
 
-    outputContent = "x: " + (coordData['x']) + 'px' +
-       "        <br/>y: " + (coordData['y']) + 'px' +
-       "        <br/>z: " + (coordData['z']) + 'px';
+    if(coordData){
+      outputContent = "x: " + (coordData['x']) + 'px' +
+         "        <br/>y: " + (coordData['y']) + 'px' +
+         "        <br/>z: " + (coordData['z']) + 'px';
+    }
+    else{
+      outputContent = "Can not pick up hands"
+    }
 
     outputDebugInfo(element, { 'l' : leftHand, 'r' :  rightHand });
     output.html(outputContent);

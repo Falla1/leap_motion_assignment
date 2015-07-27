@@ -3,11 +3,13 @@
 function ViewController () {
   window.cursor = $('#cursor');
 
-
+  var selectedItems = [];
   var self = this;
 
   self.render = function (data) {
-    updateCursorPosition(data['coordData']['x'], data['coordData']['y']);
+    if(data['coordData']){
+     updateCursorPosition(data['coordData']['x'], data['coordData']['y']);
+    }
   }
 
   self.loadImages = function() {
@@ -16,9 +18,22 @@ function ViewController () {
       $('.image-span').show(300);
   }
 
-  self.rotate = function() {
-    console.log("ROtating");
+  self.selectObject = function(position) {
+    console.log("Selecting at " + position);
   }
+
+  self.moveImagesOver = function(){
+    console.log("Moving Selected Images Over");
+  }
+
+  self.deselectEverything = function(){
+    console.log("Deleting Selected Images");
+  }
+
+  self.rotateSelected = function(hand,gesture){
+    console.log("Rotating Selected");
+  }
+
   function updateCursorPosition (x, y) {
     cursor.css({
       left: x + 'px',
