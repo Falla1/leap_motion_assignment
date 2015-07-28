@@ -1,10 +1,10 @@
 'use strict';
 
 function ViewController () {
+  var self = this;
   window.cursor = $('#cursor');
 
   var selectedItems = [];
-  var self = this;
 
   self.render = function (data) {
     if(data['coordData']){
