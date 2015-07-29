@@ -4,8 +4,6 @@ function ViewController () {
   var self = this;
   window.cursor = $('#cursor');
 
-  var selectedItems = [];
-
   self.render = function (data) {
     if(data['coordData']){
      updateCursorPosition(data['coordData']['x'], data['coordData']['y']);
@@ -32,9 +30,8 @@ function ViewController () {
       if(el.nodeType == 1){
         //It is an image that we tried to select
         if(el.tagName=="IMG"){
-          //We should use objects
-          //This will need to be changed to call the object method
-          el.style.border='2px solid #E8272C';
+          var id = el.getAttribute('id') - 1;
+          images[id].selectItem();
         }
       }
 
@@ -44,14 +41,48 @@ function ViewController () {
 
   self.moveImagesOver = function(){
     console.log("Moving Selected Images Over");
+
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].selected && !images[i].onWebDiv){
+        images[i].moveOver();
+      }
+    }
+  }
+
+  self.moveSelected = function(previousFrame, hand){
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].selected && images[i].onWebDiv){
+        images[i].moveItem(previousFrame,hand);
+      }
+    }
+  }
+
+  self.scale = function(previousFrame,leftHand, rightHand){
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].selected && images[i].onWebDiv){
+        images[i].scale(previousFrame,leftHand, rightHand);
+      }
+    }
   }
 
   self.deselectEverything = function(){
-    console.log("Deleting Selected Images");
+    //Unsure if we are wanting to do this though
+    console.log("Deselecting Selected Images");
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].selected){
+        images[i].selectItem();
+      }
+    }
   }
 
-  self.rotateSelected = function(hand,gesture){
+  self.rotateSelected = function(hand){
+
     console.log("Rotating Selected");
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].selected && images[i].onWebDiv){
+        images[i].rotate(hand);
+      }
+    }
   }
 
   function updateCursorPosition (x, y) {

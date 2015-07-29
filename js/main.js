@@ -11,12 +11,15 @@ $(function(){
 
     updateCursor(frame);
 
-    handleRotation(frame);
+    //Seperated the 'gestures' from the predefined gestures
+    //key tap and swipe vs pinch and roll
+    handleKeyTapsSwipes(frame);
 
-    handleGestures(frame);
+    handleRollPinch(frame);
+
   })
 
-  function handleGestures(frame){
+  function handleKeyTapsSwipes(frame){
 
     for(var g = 0; g < frame.gestures.length; g++){
 
@@ -26,24 +29,31 @@ $(function(){
       //Only a single hand
       if(handIds.length == 1){
           var hand = frame.hand(handIds[0]);
-          handleSingleHandGesture(hand,gesture);
-      }
-      else if(handIds.length == 2){
-        //Get the left and right hand
-        var lefthand = null;
-        frame.hand(handIds[0]).type === 'left' ? frame.hand(handIds[0]) : frame.hand(handIds[1]);
+          if(hand.valid){
+            if(hand.type == "right" && gesture.type == 'keyTap'){
+              viewController.selectObject(findScreenPosition(hand));
+            }
 
-        var righthand = null;
-        frame.hand(handIds[1]).type === 'right' ? righthand = frame.hand(handIds[1]) : frame.hand(handIds[0]);
+            else if(hand.type == "right" && gesture.type == 'swipe'){
 
-        handleDoubleHandGesture(lefthand,righthand,gesture);
+              //Getting Horizontal Direction
+              var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+                if(isHorizontal){
+                    //Determine the direction of the movement
+                    if(gesture.direction[0] > 0){
+                        viewController.moveImagesOver();
+                    } else {
+                        viewController.deselectEverything();
+                    }
+                }
+            }
+          }
       }
-    
    } 
 
   }
 
-  function handleRotation(frame){
+  function handleRollPinch(frame){
 
     if(frame.hands.length > 0){
       //Get the objects for the hands
@@ -59,42 +69,19 @@ $(function(){
         imagesLoaded = !imagesLoaded;
       }
 
-      else if(lefthand && lefthand.roll() < 1){
+      else if(lefthand && (lefthand.roll() > 0.3 || lefthand.roll() < -0.3) && !righthand){
         viewController.rotateSelected(lefthand);
       }
-    }
-  }
 
-  function handleSingleHandGesture(hand,gesture,frame){
-    if(gesture.type == 'keyTap'){
-      viewController.selectObject(findScreenPosition(hand, hand));
-    }
+      else if(pinch(lefthand) && pinch(righthand)){
+        console.log("Double Pinch");
+        viewController.scale(leapController.frame(1),lefthand,righthand);
+      }
 
-    else if(gesture.type == 'swipe'){
-
-      //Getting Horizontal Direction
-      var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
-        if(isHorizontal){
-            //Determine the direction of the movement
-            if(gesture.direction[0] > 0){
-                viewController.moveImagesOver();
-            } else {
-                viewController.deselectEverything();
-            }
-        }
-    }
-
-    else if(pinch(hand)){
-      //Use dragula to pinch the selected object
-      console.log("Single Pinch");
-    }
-  }
-
-  function handleDoubleHandGesture(lefthand, righthand, gesture,frame){
-
-    if(pinch(lefthand) && pinch(righthand)){
-      //Use dragula to pinch the scale object
-      console.log("Double Pinch");
+      else if(pinch(lefthand)){
+        console.log("Single Pinch");
+        viewController.moveSelected(leapController.frame(1), lefthand);
+      }
     }
   }
 
@@ -113,7 +100,8 @@ $(function(){
   }
 
   function pinch (hand) {
-    return hand.pinchStrength > 0.5;
+    if(!hand) return false;
+    return hand.pinchStrength > 0.8;
   }
 
   function updateCursor(frame){
@@ -147,7 +135,7 @@ $(function(){
         viewController.render({ 'coordData' : coordData,
                                 'element'   : el });
       }
-      
+
       logger.updateLogOutput({ 'coordData'  : coordData,
                                  'element'    : el,
                                  'lefthand'   : lefthand,
