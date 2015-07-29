@@ -11,6 +11,13 @@ $(function(){
 
     updateCursor(frame);
 
+    handleRotation(frame);
+
+    handleGestures(frame);
+  })
+
+  function handleGestures(frame){
+
     for(var g = 0; g < frame.gestures.length; g++){
 
       var gesture = frame.gestures[g];
@@ -33,12 +40,32 @@ $(function(){
       }
     
    } 
-  })
-  //TODO Do we still want this?
-  .on('gesture', function(gesture) {   
-  });
 
-  function handleSingleHandGesture(hand,gesture){
+  }
+
+  function handleRotation(frame){
+
+    if(frame.hands.length > 0){
+      //Get the objects for the hands
+      var lefthand = null;
+      frame.hands[0].type === 'left' ? lefthand = frame.hands[0] : lefthand = frame.hands[1];
+
+      var righthand = null;
+      frame.hands[0].type === 'right' ? righthand = frame.hands[0] : righthand = frame.hands[1];
+
+      //Open up the tab
+      if(!imagesLoaded && openGesture(lefthand, righthand)){
+        viewController.loadImages();
+        imagesLoaded = !imagesLoaded;
+      }
+
+      else if(lefthand && lefthand.roll() < 1){
+        viewController.rotateSelected(lefthand);
+      }
+    }
+  }
+
+  function handleSingleHandGesture(hand,gesture,frame){
     if(gesture.type == 'keyTap'){
       viewController.selectObject(findScreenPosition(hand, hand));
     }
@@ -56,21 +83,18 @@ $(function(){
             }
         }
     }
-    else if(gesture.type == 'circle'){
-      viewController.rotateSelected(hand.gesture);
-    }
 
     else if(pinch(hand)){
       //Use dragula to pinch the selected object
-      
+      console.log("Single Pinch");
     }
   }
 
-  function handleDoubleHandGesture(lefthand, righthand, gesture){
+  function handleDoubleHandGesture(lefthand, righthand, gesture,frame){
 
     if(pinch(lefthand) && pinch(righthand)){
       //Use dragula to pinch the scale object
-      
+      console.log("Double Pinch");
     }
   }
 
@@ -82,11 +106,8 @@ $(function(){
     return false;
   }
 
-  function findScreenPosition(lefthand, righthand) {
-    if (lefthand) {
-      return lefthand.screenPosition(lefthand.palmPosition);
-    }
-    else if (righthand) {
+  function findScreenPosition(righthand) {
+    if (righthand) {
       return righthand.screenPosition(righthand.palmPosition);
     }
   }
@@ -98,38 +119,35 @@ $(function(){
   function updateCursor(frame){
 
     if(frame.hands.length > 0){
-      //Get the objects for the hands
+
       var lefthand = null;
       frame.hands[0].type === 'left' ? lefthand = frame.hands[0] : lefthand = frame.hands[1];
 
+      //Use RightHand to move cursor
       var righthand = null;
       frame.hands[0].type === 'right' ? righthand = frame.hands[0] : righthand = frame.hands[1];
+     
+      if(righthand){
+        //Get position of right hand
+        var screenPosition = findScreenPosition(righthand);
+        //Get the coord data for the hand
+        var coordData = { 'x' : screenPosition[0].toPrecision(4),
+            'y' : screenPosition[1].toPrecision(4),
+            'z' : screenPosition[2].toPrecision(4) };
+        //get the element of the coord data
+        if(screenPosition){
+          cursor.hide();
+          var el = document.elementFromPoint(
+            screenPosition[0],
+            screenPosition[1]
+          );
+          cursor.show();
+        }
 
-      //Get position of left or right hand
-      var screenPosition = findScreenPosition(lefthand, righthand);
-      //Get the coord data for the hand
-      var coordData = { 'x' : screenPosition[0].toPrecision(4),
-          'y' : screenPosition[1].toPrecision(4),
-          'z' : screenPosition[2].toPrecision(4) };
-      //get the element of the coord data
-      if(screenPosition){
-        cursor.hide();
-        var el = document.elementFromPoint(
-          screenPosition[0],
-          screenPosition[1]
-        );
-        cursor.show();
-      }
-
-      //Open up the tab
-      //Terrible place to have it, we will need to move ?
-      if(!imagesLoaded && openGesture(lefthand, righthand)){
-        viewController.loadImages(el);
-        imagesLoaded = !imagesLoaded;
-      }
-
-      viewController.render({ 'coordData' : coordData,
+        viewController.render({ 'coordData' : coordData,
                                 'element'   : el });
+      }
+      
       logger.updateLogOutput({ 'coordData'  : coordData,
                                  'element'    : el,
                                  'lefthand'   : lefthand,

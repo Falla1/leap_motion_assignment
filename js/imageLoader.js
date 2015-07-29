@@ -1,6 +1,5 @@
 $(function() {
   var imagePath = 'images/img_';
-  var imageWidth = imageHeight =  100;
 
   for (var i = 16; i > 0; i--) {
     //Create the span to hold the image element
