@@ -82,6 +82,11 @@ $(function(){
         console.log("Single Pinch");
         viewController.moveSelected(leapController.frame(1), lefthand);
       }
+
+      else if(pinch(righthand)){ //trying right pinch to end roll
+        console.log("Stopping");
+        viewController.deselectEverything();
+      }
     }
   }
 
