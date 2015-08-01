@@ -39,6 +39,9 @@ $(function() {
         }
         else{
           elem.style.border='1px solid #E8272C';
+          elem.style.opacity=1.0; //trying to make the opacity 100% when selected, need 0.5 for half/ 50%
+          console.log("changing opacity");
+          //TODO: get children and change their opacity to 0.5
         }      
       }
 

@@ -83,7 +83,7 @@ $(function(){
         viewController.moveSelected(leapController.frame(1), lefthand);
       }
 
-      else if(pinch(righthand)){ //trying right pinch to end roll
+      else if(pinch(righthand) && !lefthand){ //trying right pinch to end roll and scale
         console.log("Stopping");
         viewController.deselectEverything();
       }
