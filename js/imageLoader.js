@@ -39,15 +39,20 @@ $(function() {
         }
         else{
           elem.style.border='1px solid #E8272C';
-          elem.style.opacity=1.0; //trying to make the opacity 100% when selected, need 0.5 for half/ 50%
-          console.log("changing opacity");
-          //TODO: get children and change their opacity to 0.5
-          var d = document.getElementById('workspace-div').childNodes.length;
-          console.log(d);
+          elem.style.opacity=1.0; //Make the opacity 100% when selected
+          var x=elem.getAttribute('id');
+          console.log("changing opacity of "+x);
+          
+          var d = document.getElementById('workspace-div').childNodes.length; //get number of images in workspace
+          console.log("number of images"+d);
+          var c = document.getElementById('workspace-div').childNodes;
           if(d>2){
-            var c = document.getElementById('workspace-div').childNodes;
-            c[1].style.opacity = 0.5;
-          }
+            //c[1].style.opacity = 0.5; 
+            var a;
+            for(a=1; a<(d-1); a++){ //the newest image or image at the top is added to the end of the array
+                c[a].style.opacity = 0.5;
+            }
+          } 
           
         }      
       }
