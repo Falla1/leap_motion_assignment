@@ -42,6 +42,13 @@ $(function() {
           elem.style.opacity=1.0; //trying to make the opacity 100% when selected, need 0.5 for half/ 50%
           console.log("changing opacity");
           //TODO: get children and change their opacity to 0.5
+          var d = document.getElementById('workspace-div').childNodes.length;
+          console.log(d);
+          if(d>2){
+            var c = document.getElementById('workspace-div').childNodes;
+            c[1].style.opacity = 0.5;
+          }
+          
         }      
       }
 
