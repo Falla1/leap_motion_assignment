@@ -69,10 +69,6 @@ $(function(){
         imagesLoaded = !imagesLoaded;
       }
 
-      else if(lefthand && (lefthand.roll() > 0.3 || lefthand.roll() < -0.3) && !righthand){
-        viewController.rotateSelected(lefthand);
-      }
-
       else if(pinch(lefthand) && pinch(righthand)){
         console.log("Double Pinch");
         viewController.scale(leapController.frame(1),lefthand,righthand);
@@ -82,7 +78,9 @@ $(function(){
         console.log("Single Pinch");
         viewController.moveSelected(leapController.frame(1), lefthand);
       }
-
+      else if(lefthand && (lefthand.roll() > 0.01 || lefthand.roll() < -0.01) && !righthand){
+        viewController.rotateSelected(lefthand);
+      }
       else if(pinch(righthand) && !lefthand){ //trying right pinch to end roll and scale
         console.log("Stopping");
         viewController.deselectEverything();

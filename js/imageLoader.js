@@ -27,6 +27,10 @@ $(function() {
         elem.setAttribute('alt', 'image');
         elem.setAttribute('id', i);
 
+        //Setting them so we can scale with it
+        elem.style.height='100px';
+        elem.style.width='100px';
+
         //Add the image to the image span, add the span to the preview div
         elemContainer.appendChild(elem);
         document.getElementById('image-div').appendChild(elemContainer);
@@ -78,8 +82,8 @@ $(function() {
         //elem.style.top = Math.floor(Math.random() * (maxY-minY)) + minY + 'px';
         
         //testing purposes
-        elem.style.left = 1500;
-        elem.style.top = 170;
+        elem.style.left = 10 + 'px';
+        elem.style.top = 10 + 'px';
 
       }
 
@@ -102,13 +106,15 @@ $(function() {
         var rightHandMovement = rightHand.translation(previousFrame);
 
         //every mm = .01 scale
-        var scaleX = 1 + (rightHandMovement[0] * .01);
-        var scaleY = 1 + (rightHandMovement[1] * .01);
+        var scaleX = rightHandMovement[0] * .01;
+        var scaleY = rightHandMovement[1] * .01;
 
-        elem.style.transform = elem.style.transform +'scale(' + scaleX + ',' + scaleY + ')';
+        elem.style.height = parseInt(elem.style.height) + (parseInt(elem.style.height) * scaleY) + 'px';
+        elem.style.width = parseInt(elem.style.width) + (parseInt(elem.style.width) * scaleX) + 'px';
 
-        elem.style.webkitTransform = elem.style.MozTransform = elem.style.msTransform =
-        elem.style.OTransform = elem.style.transform;
+        //elem.style.transform = this.getNewTransform('scale', 'scale(' + scaleX + ',' + scaleY + ')');
+        //elem.style.webkitTransform = elem.style.MozTransform = elem.style.msTransform =
+        //elem.style.OTransform = elem.style.transform;
 
       }
 
@@ -117,14 +123,29 @@ $(function() {
         var position = hand.screenPosition();
         var rotation = hand.roll();
 
-        //No idea...This is copy pasta from example
-        //elem.style.left = elem.style.left - (elem.width  / 2) + 'px';
-        //elem.style.top  = elem.style.top - (elem.height / 2) + 'px';
-
-        elem.style.transform = 'rotate(' + -rotation + 'rad)';
+        elem.style.transform = this.getNewTransform('rotate','rotate(' + -rotation + 'rad)');
 
         elem.style.webkitTransform = elem.style.MozTransform = elem.style.msTransform =
         elem.style.OTransform = elem.style.transform;
+      }
+
+      //Was being used when we were applying rotate and scale as a transform
+      self.getNewTransform = function(transformType,transformToApply){
+
+        var currentTransform = elem.style.transform.split(" ");
+        var newTransform = "";
+
+        for(var i = 0 ; currentTransform.length > i ; i++){
+
+          if(transformType.indexOf(currentTransform[i]) != -1){
+            newTransform = currentTransform[i] + " " + newTransform;
+          }
+        }
+
+        newTransform = newTransform + transformToApply;
+
+        return newTransform;
+
       }
 
     };
