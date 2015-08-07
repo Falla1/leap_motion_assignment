@@ -11,13 +11,14 @@ $(function(){
 
     updateCursor(frame);
 
-    //Seperated the 'gestures' from the predefined gestures
-    //key tap and swipe vs pinch and roll
-    handleKeyTapsSwipes(frame);
-
-    handleRollPinch(frame);
-
-  })
+    //Handle gestures based on whether one or two hands in frame
+    if(frame.hands.length === 1){
+      handleKeyTapsSwipes(frame);
+    }
+    else if(frame.hands.length === 2){
+      handleRollPinch(frame)
+    }
+  });
 
   function handleKeyTapsSwipes(frame){
 
@@ -28,29 +29,28 @@ $(function(){
 
       //Only a single hand
       if(handIds.length == 1){
-          var hand = frame.hand(handIds[0]);
-          if(hand.valid){
-            if(hand.type == "right" && gesture.type == 'keyTap'){
+        var hand = frame.hand(handIds[0]);
+
+        if(hand.valid){
+          if(hand.type = "left"){
+            if(gesture.type == 'keyTap'){
               viewController.selectObject(findScreenPosition(hand));
             }
-
-            else if(hand.type == "right" && gesture.type == 'swipe'){
-
-              //Getting Horizontal Direction
-              var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
-                if(isHorizontal){
-                    //Determine the direction of the movement
-                    if(gesture.direction[0] > 0){
-                        viewController.moveImagesOver();
-                    } else {
-                        viewController.deselectEverything();
-                    }
+            else if(gesture.type == 'swipe'){
+            //Getting Horizontal Direction
+              if(Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1])){
+                //Determine the direction of the movement
+                if(gesture.direction[0] > 0){
+                    viewController.moveImagesToWorkspace();
+                } else {
+                    viewController.deselectEverything();
                 }
+              }
             }
           }
+        }
       }
-   } 
-
+    }
   }
 
   function handleRollPinch(frame){
@@ -70,19 +70,19 @@ $(function(){
       }
 
       else if(pinch(lefthand) && pinch(righthand)){
-        console.log("Double Pinch");
+        // console.log("Double Pinch");
         viewController.scale(leapController.frame(1),lefthand,righthand);
       }
 
       else if(pinch(lefthand)){
-        console.log("Single Pinch");
+        // console.log("Single Pinch");
         viewController.moveSelected(leapController.frame(1), lefthand);
       }
       else if(lefthand && (lefthand.roll() > 0.01 || lefthand.roll() < -0.01) && !righthand){
         viewController.rotateSelected(lefthand);
       }
       else if(pinch(righthand) && !lefthand){ //trying right pinch to end roll and scale
-        console.log("Stopping");
+        // console.log("Stopping");
         viewController.deselectEverything();
       }
     }
@@ -96,9 +96,9 @@ $(function(){
     return false;
   }
 
-  function findScreenPosition(righthand) {
-    if (righthand) {
-      return righthand.screenPosition(righthand.palmPosition);
+  function findScreenPosition(hand) {
+    if (hand) {
+      return hand.screenPosition(hand.palmPosition);
     }
   }
 
@@ -117,10 +117,10 @@ $(function(){
       //Use RightHand to move cursor
       var righthand = null;
       frame.hands[0].type === 'right' ? righthand = frame.hands[0] : righthand = frame.hands[1];
-     
-      if(righthand){
+
+      if(lefthand){
         //Get position of right hand
-        var screenPosition = findScreenPosition(righthand);
+        var screenPosition = findScreenPosition(lefthand);
         //Get the coord data for the hand
         var coordData = { 'x' : screenPosition[0].toPrecision(4),
             'y' : screenPosition[1].toPrecision(4),

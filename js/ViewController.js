@@ -17,8 +17,8 @@ function ViewController () {
   }
 
   self.selectObject = function(position) {
-    console.log("Selecting at " + position);
-    
+    // console.log("Selecting at " + position);
+
     //Get the element at the position
     var el = document.elementFromPoint(
       position[0],
@@ -39,19 +39,19 @@ function ViewController () {
 
   }
 
-  self.moveImagesOver = function(){
-    console.log("Moving Selected Images Over");
+  self.moveImagesToWorkspace = function(){
+    // console.log("Moving Selected Images Over");
 
     for(var i = 0 ; i < images.length ; i ++){
-      if(images[i].selected && !images[i].onWebDiv){
-        images[i].moveOver();
+      if(images[i].selected && !images[i].onWorkspace){
+        images[i].moveToWorkspace();
       }
     }
   }
 
   self.moveSelected = function(previousFrame, hand){
     for(var i = 0 ; i < images.length ; i ++){
-      if(images[i].selected && images[i].onWebDiv){
+      if(images[i].selected && images[i].onWorkspace){
         images[i].moveItem(previousFrame,hand);
       }
     }
@@ -59,7 +59,7 @@ function ViewController () {
 
   self.scale = function(previousFrame,leftHand, rightHand){
     for(var i = 0 ; i < images.length ; i ++){
-      if(images[i].selected && images[i].onWebDiv){
+      if(images[i].selected && images[i].onWorkspace){
         images[i].scale(previousFrame,leftHand, rightHand);
       }
     }
@@ -67,7 +67,7 @@ function ViewController () {
 
   self.deselectEverything = function(){
     //Unsure if we are wanting to do this though
-    console.log("Deselecting Selected Images");
+    // console.log("Deselecting Selected Images");
     for(var i = 0 ; i < images.length ; i ++){
       if(images[i].selected){
         images[i].selectItem();
@@ -77,9 +77,9 @@ function ViewController () {
 
   self.rotateSelected = function(hand){
 
-    console.log("Rotating Selected");
+    // console.log("Rotating Selected");
     for(var i = 0 ; i < images.length ; i ++){
-      if(images[i].selected && images[i].onWebDiv){
+      if(images[i].selected && images[i].onWorkspace){
         images[i].rotate(hand);
       }
     }

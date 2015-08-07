@@ -1,12 +1,19 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+  <link href='http://fonts.googleapis.com/css?family=Chivo:900italic' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.indigo-pink.min.css">
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
   <script src="http://js.leapmotion.com/leap-0.6.4.js"></script>
   <script src="http://js.leapmotion.com/leap-plugins-0.1.11.js"></script>
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
   <script src="js/LeapLogger.js"></script>
   <script src="js/ViewController.js"></script>
+  <script src="js/Photo.js"></script>
   <script src="js/imageLoader.js"></script>
   <script src="js/main.js"></script>
 
@@ -15,23 +22,36 @@
 </head>
 <body>
 
+<div class="layout-transparent mdl-layout mdl-js-layout">
+  <header class="mdl-layout__header mdl-layout__header--transparent">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+      <span id="title"><h3>IMOTIONAGE</h3></span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+    </div>
+  </header>
+</div>
+
+
+
+  
   <div class="container-div">
-
-
-    <div id="cursor">
+      <div id="cursor">
+      </div>
+      <div class="mdl-card mdl-shadow--4dp loading-area">
+        <div class="open-icons">
+          <img class="photo-icon" src="icons/photos.svg">
+          </img>
+        </div>
+        <div id="image-div" class="image-div">
+        </div>
+      </div>
+      <div id="workspace-div" class="mdl-card mdl-shadow--4dp workspace-div">
+      </div>
     </div>
 
-<!--     <div id="load-buttonWrap" class="load-buttonWrap">
-      <button id="load-button" class="load-button">LOAD IMAGES</button>
-    </div> -->
-
-    <div id="image-div" class="image-div">
-    </div>
-    <div id="workspace-div" class="workspace-div">
-      
-    </div>
-  </div>
-  <div id="output" class="output">
+    <div id="output" class="output">
     </div>
 </body>
 </html>
