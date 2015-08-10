@@ -3,6 +3,7 @@ $(function(){
   var viewController = new ViewController();
   var logger = new LeapLogger();
   var imagesLoaded = false;
+  var imagesMovedWorkSpace = false;
 
   var leapController = new Leap.Controller({enableGestures: true}).use('screenPosition', { scale: 1}).connect();
 
@@ -42,6 +43,7 @@ $(function(){
                 //Determine the direction of the movement
                 if(gesture.direction[0] > 0){
                     viewController.moveImagesToWorkspace();
+                    imagesMovedWorkSpace = true;
                 } else {
                     viewController.deselectEverything();
                 }
@@ -118,9 +120,29 @@ $(function(){
       var righthand = null;
       frame.hands[0].type === 'right' ? righthand = frame.hands[0] : righthand = frame.hands[1];
 
-      if(lefthand){
+      if(lefthand && !imagesMovedWorkSpace){
         //Get position of right hand
         var screenPosition = findScreenPosition(lefthand);
+        //Get the coord data for the hand
+        var coordData = { 'x' : screenPosition[0].toPrecision(4),
+            'y' : screenPosition[1].toPrecision(4),
+            'z' : screenPosition[2].toPrecision(4) };
+        //get the element of the coord data
+        if(screenPosition){
+          cursor.hide();
+          var el = document.elementFromPoint(
+            screenPosition[0],
+            screenPosition[1]
+          );
+          cursor.show();
+        }
+
+        viewController.render({ 'coordData' : coordData,
+                                'element'   : el });
+      }
+      else if(righthand && imagesMovedWorkSpace){
+                //Get position of right hand
+        var screenPosition = findScreenPosition(righthand);
         //Get the coord data for the hand
         var coordData = { 'x' : screenPosition[0].toPrecision(4),
             'y' : screenPosition[1].toPrecision(4),
@@ -143,8 +165,6 @@ $(function(){
                                  'element'    : el,
                                  'lefthand'   : lefthand,
                                  'righthand'  : righthand });
-
+    }
   }
-}
-
 });

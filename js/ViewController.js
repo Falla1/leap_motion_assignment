@@ -11,7 +11,8 @@ function ViewController () {
   }
 
   self.loadImages = function() {
-      $('#load-buttonWrap').hide(10);
+    $('#open-icons').hide();
+      // $('#load-buttonWrap').hide(10);
       $('.image-div').show(300);
       $('.image-span').show(300);
   }
