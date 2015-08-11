@@ -37,19 +37,24 @@ function Image (imagePath, id) {
     }
     else{
       elem.style.border='1px solid #E8272C';
-      elem.style.opacity=1.0; //Make the opacity 100% when selected
 
-      // var x = elem.getAttribute('id');
-      var d = document.getElementById('workspace-div').childNodes.length; //get number of images in workspace
-      var c = document.getElementById('workspace-div').childNodes;
-      if(d > 2){
-        var a;
-
-        for(a = 1; a < ( d-1 ); a++){ //the newest image or image at the top is added to the end of the array
-            c[a].style.opacity = 0.5;
+      // console.log("Deselecting Selected Images");
+      for(var i = 0 ; i < images.length ; i ++){
+        if(!images[i].selected && images[i].onWorkspace && this.onWorkspace){
+          images[i].lowerOpacity();
         }
       }
     }
+  }
+
+  self.lowerOpacity = function(){
+    elem.style.opacity=0.5;
+    elemContainer.style.opacity=0.5;
+  }
+
+  self.resetOpacity = function(){
+    elem.style.opacity=1.0;
+    elemContainer.style.opacity=1.0;
   }
 
   self.moveToWorkspace = function() {
@@ -88,9 +93,32 @@ function Image (imagePath, id) {
 
     var movement = hand.translation(previousFrame);
 
+    //Getting the bounding box of the image div
+    var rect = document.getElementById("workspace-div").getBoundingClientRect();
+
     //every mm = 3px
-    elem.style.left = (parseInt(elem.style.left) + movement[0] * 3) + 'px';
-    elem.style.top = (parseInt(elem.style.top) + movement[1] * 3) + 'px';
+    var newLeft = (parseInt(elem.style.left) + movement[0] * 3);
+    var newTop = (parseInt(elem.style.top) + movement[1] * 3);
+
+    if(newLeft > rect.width -  parseInt(elem.style.width)||
+      newLeft <  1){
+      //do nothing to the x
+    }
+    else{
+      //else, still within the x bound
+      elem.style.left = newLeft + 'px';
+    }
+
+    if(newTop > rect.height -  parseInt(elem.style.height)||
+      newTop <  1){
+      //do nothing to the y
+    }
+    else{
+      //else, still within the y bound
+      elem.style.top = newTop + 'px';
+    }
+
+    
 
   }
 
@@ -106,13 +134,17 @@ function Image (imagePath, id) {
     var scaleX = rightHandMovement[0] * .01;
     var scaleY = rightHandMovement[1] * .01;
 
-    elem.style.height = parseInt(elem.style.height) + (parseInt(elem.style.height) * scaleY) + 'px';
-    elem.style.width = parseInt(elem.style.width) + (parseInt(elem.style.width) * scaleX) + 'px';
+    var newY = parseInt(elem.style.height) + (parseInt(elem.style.height) * scaleY);
+    var newX = parseInt(elem.style.width) + (parseInt(elem.style.width) * scaleX);
 
-    //elem.style.transform = this.getNewTransform('scale', 'scale(' + scaleX + ',' + scaleY + ')');
-    //elem.style.webkitTransform = elem.style.MozTransform = elem.style.msTransform =
-    //elem.style.OTransform = elem.style.transform;
-
+    if(newY < 30 || newX < 30
+      || newY > 250 || newX > 250){
+      //do nothing.
+    }
+    else {
+      elem.style.height = newY  + 'px';
+      elem.style.width = newX  + 'px';
+    }
   }
 
   self.rotate = function(hand) {

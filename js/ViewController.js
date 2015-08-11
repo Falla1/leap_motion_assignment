@@ -31,6 +31,7 @@ function ViewController () {
       if(el.nodeType == 1){
         //It is an image that we tried to select
         if(el.tagName=="IMG"){
+          this.deselectEverything();
           var id = el.getAttribute('id') - 1;
           images[id].selectItem();
         }
@@ -67,7 +68,13 @@ function ViewController () {
   }
 
   self.deselectEverything = function(){
-    //Unsure if we are wanting to do this though
+    //Firstly, reset everything's opacity
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].onWorkspace){
+        images[i].resetOpacity();
+      }
+    }
+
     // console.log("Deselecting Selected Images");
     for(var i = 0 ; i < images.length ; i ++){
       if(images[i].selected){
