@@ -3,6 +3,7 @@ $(function(){
   var viewController = new ViewController();
   var logger = new LeapLogger();
   var imagesLoaded = false;
+  var imagesMovedWorkSpace = false;
 
   var leapController = new Leap.Controller({enableGestures: true}).use('screenPosition', { scale: 1}).connect();
 
@@ -17,9 +18,10 @@ $(function(){
 
     handleRollPinch(frame);
 
-  })
 
-  function handleKeyTapsSwipes(frame){
+  });
+
+function handleKeyTapsSwipes(frame){
 
     for(var g = 0; g < frame.gestures.length; g++){
 
@@ -41,7 +43,7 @@ $(function(){
                 if(isHorizontal){
                     //Determine the direction of the movement
                     if(gesture.direction[0] > 0){
-                        viewController.moveImagesOver();
+                        viewController.moveImagesToWorkspace();
                     } else {
                         viewController.deselectEverything();
                     }
@@ -70,23 +72,23 @@ $(function(){
       }
 
       else if(pinch(lefthand) && pinch(righthand)){
-        console.log("Double Pinch");
+        //console.log("Double Pinch");
         viewController.scale(leapController.frame(1),lefthand,righthand);
       }
 
       else if(pinch(lefthand)){
-        console.log("Single Pinch");
+        //console.log("Single Pinch");
         viewController.moveSelected(leapController.frame(1), lefthand);
       }
       else if(lefthand && (lefthand.roll() > 0.01 || lefthand.roll() < -0.01) && !righthand){
         viewController.rotateSelected(lefthand);
       }
       else if(pinch(righthand) && !lefthand){ //trying right pinch to end roll and scale
-        console.log("Stopping");
+        //console.log("Stopping");
         viewController.deselectEverything();
       }
     }
-  }
+  }  
 
   function openGesture(lefthand, righthand) {
     if(!lefthand || !righthand) return false;
@@ -96,9 +98,9 @@ $(function(){
     return false;
   }
 
-  function findScreenPosition(righthand) {
-    if (righthand) {
-      return righthand.screenPosition(righthand.palmPosition);
+  function findScreenPosition(hand) {
+    if (hand) {
+      return hand.screenPosition(hand.palmPosition);
     }
   }
 
@@ -107,7 +109,7 @@ $(function(){
     return hand.pinchStrength > 0.8;
   }
 
-  function updateCursor(frame){
+ function updateCursor(frame){
 
     if(frame.hands.length > 0){
 
