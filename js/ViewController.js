@@ -41,6 +41,14 @@ function ViewController () {
 
   }
 
+  self.shuffleObject = function(position) { //used for occlusion
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].selected && images[i].onWorkspace){ //get selected image
+        console.log("testing selected 1 2 3");
+      }
+    }
+  }
+
   self.moveImagesToWorkspace = function(){
     // console.log("Moving Selected Images Over");
 

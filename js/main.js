@@ -36,6 +36,11 @@ function handleKeyTapsSwipes(frame){
               viewController.selectObject(findScreenPosition(hand));
             }
 
+            else if(hand.type == "right" && gesture.type == 'screenTap'){  //testing can recognize screentap
+              console.log("screentap!");
+              viewController.shuffleObject(findScreenPosition(hand));
+            }
+
             else if(hand.type == "right" && gesture.type == 'swipe'){
 
               //Getting Horizontal Direction
