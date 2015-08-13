@@ -90,13 +90,15 @@ function Image (imagePath, id) {
   }
 
   self.shuffleForward = function(hand) { //for occlusion
-    elem.style.zIndex="100"; //if screentap value positive then z-index positive
+    elem.style.zIndex="700"; //if screentap value positive then z-index positive
     console.log("in shuffle method forward");
   }
 
   self.shuffleBackward = function(hand) { //for occlusion
-    elem.style.zIndex="-1"; //if screentap value positive then z-index positive, need to make this go back by 1 instead of completely back
-    console.log("in shuffle method backward");
+    //elem.style.zIndex="-1"; //if screentap value negative then z-index decreases
+    var d= elem.style.zIndex;
+    elem.style.zIndex=d-1;
+    console.log("in shuffle method backward "+d);
   }
 
   self.moveItem = function(previousFrame, hand) {
