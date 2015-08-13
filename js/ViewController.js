@@ -41,10 +41,20 @@ function ViewController () {
 
   }
 
-  self.shuffleObject = function(position) { //used for occlusion
+  self.shuffleObjectForward = function(position, hand) { //used for occlusion
     for(var i = 0 ; i < images.length ; i ++){
       if(images[i].selected && images[i].onWorkspace){ //get selected image
-        console.log("testing selected 1 2 3");
+        console.log("testing selected forward");
+        images[i].shuffleForward(hand);
+      }
+    }
+  }
+
+  self.shuffleObjectBackward = function(position, hand) { //used for occlusion
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].selected && images[i].onWorkspace){ //get selected image
+        console.log("testing selected back");
+        images[i].shuffleBackward(hand);
       }
     }
   }

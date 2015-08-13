@@ -38,7 +38,16 @@ function handleKeyTapsSwipes(frame){
 
             else if(hand.type == "right" && gesture.type == 'screenTap'){  //testing can recognize screentap
               console.log("screentap!");
-              viewController.shuffleObject(findScreenPosition(hand));
+              
+              if(gesture.direction[0] > 0){ //towards you, shuffle forward, bring to front
+                console.log("positive"+gesture.direction[2]);
+                viewController.shuffleObjectForward(findScreenPosition(hand), hand);
+              }
+              else{
+                console.log("negative"+gesture.direction[2]); //towards screen, shuffle backward, go back
+                viewController.shuffleObjectBackward(findScreenPosition(hand), hand);
+              }
+              
             }
 
             else if(hand.type == "right" && gesture.type == 'swipe'){
