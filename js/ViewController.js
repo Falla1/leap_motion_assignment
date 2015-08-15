@@ -3,6 +3,9 @@
 function ViewController () {
   var self = this;
   window.cursor = $('#cursor');
+  var iconToggle = 1;
+  var iconFile = { 0 : "icons/open_hands.png",
+                   1 : "icons/open_hands_end.png"}
 
   self.render = function (data) {
     if(data['coordData']){
@@ -117,4 +120,12 @@ function ViewController () {
       top:  y + 'px'
     });
   };
+  $('#hidebutton').on('click', function() {
+    $('#gestureGuide').hide();
+  });
+  window.setInterval(function(){
+    $('#openGestureIcon').attr('src', iconFile[iconToggle]);
+    iconToggle = Math.abs(1 - iconToggle);
+    console.log("sauce");
+  }, 1000);
 }

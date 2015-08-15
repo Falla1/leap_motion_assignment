@@ -21,7 +21,7 @@ $(function(){
 
   });
 
-function handleKeyTapsSwipes(frame){
+  function handleKeyTapsSwipes(frame){
 
     for(var g = 0; g < frame.gestures.length; g++){
 
@@ -65,8 +65,7 @@ function handleKeyTapsSwipes(frame){
             }
           }
       }
-   } 
-
+    } 
   }
 
   function handleRollPinch(frame){
@@ -155,10 +154,10 @@ function handleKeyTapsSwipes(frame){
                                 'element'   : el });
       }
 
-      logger.updateLogOutput({ 'coordData'  : coordData,
-                                 'element'    : el,
-                                 'lefthand'   : lefthand,
-                                 'righthand'  : righthand });
+      // logger.updateLogOutput({ 'coordData'  : coordData,
+      //                            'element'    : el,
+      //                            'lefthand'   : lefthand,
+      //                            'righthand'  : righthand });
 
   }
 }

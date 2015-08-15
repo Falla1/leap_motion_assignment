@@ -110,7 +110,7 @@ function Image (imagePath, id) {
 
     //every mm = 3px
     var newLeft = (parseInt(elem.style.left) + movement[0] * 3);
-    var newTop = (parseInt(elem.style.top) + movement[1] * 3);
+    var newTop = (parseInt(elem.style.top) - movement[1] * 3);
 
     if(newLeft > rect.width -  parseInt(elem.style.width)||
       newLeft <  1){

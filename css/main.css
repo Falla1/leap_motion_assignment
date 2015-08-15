@@ -13,15 +13,32 @@ body {
 }
 .open-icons{
   margin:0px auto;
-    opacity: 50%;
+  opacity: 50%;
 }
 
 .photo-icon{
-  width: 100px;
-  height: 100px;
+  float: left;
+  margin: 0% 25% 0% 25%;
+  width: 50%;
+  min-width: 50%;
+  height: 30%;
 }
+.icon-label{
+  margin: 0% 10% 0% 10%;
+  float: left;
+}
+.hidebutton-div{
+  padding:0% 25% 0% 10%;
+}
+.instruction-div{
+  float: left;
+  width: 100%;
+  min-width: 100%;
+  padding: 1% 1% 1% 1%;
+}
+
 .container-div{
-  padding:4% 20% 0% 20%;
+  padding:2% 10% 0% 10%;
 }
 .output{
   float: left;
@@ -44,38 +61,17 @@ body {
   background: -moz-radial-gradient(100px 100px, circle, #5cabff, #000);
   background: radial-gradient(100px 100px, circle, #5cabff, #000);
 }
-
-.load-button{
-  padding: 1em;
-  margin: auto;
-  background-color: gray;
-  border-radius: 2px;
-  border-style: solid;
-  border-width: 1px;
-  font-size: 1em;
-}
-.load-button:hover{
-  background-color:#CCCCCC;
-  border-color: black;
-  border-radius: 2px;
-  border-style: solid;
-}
-
-.load-buttonWrap{
-  text-align: center;
+.gesture-guide{
   float: left;
-  padding:10px 10px 10px 10px;
-}
-
-.workspace-div{
-  float: right;
-  width: 75%;
+  width: 10%;
   height: 100%;
+  max-height: 700px;
   min-height: 700px;
-  background-color: #CCCCCC;  
+  background-color: #CCCCCC;
   border-radius: 3px;
   border-style: solid;
   border-width: 1px;
+  margin-right: 0.25%;
 }
 .loading-area{
   float: left;
@@ -88,6 +84,18 @@ body {
   border-style: solid;
   border-width: 1px;
 }
+
+.workspace-div{
+  float: right;
+  width: 63%;
+  height: 100%;
+  min-height: 700px;
+  background-color: #CCCCCC;  
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px;
+}
+
 .image-div{
   width:100%;
   max-width: 100%;
