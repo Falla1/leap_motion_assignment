@@ -38,7 +38,7 @@ $(function(){
 
             else if(hand.type == "right" && gesture.type == 'screenTap'){  //testing can recognize screentap
               console.log("screentap!");
-              
+
               if(gesture.direction[0] > 0){ //towards you, shuffle forward, bring to front
                 console.log("positive"+gesture.direction[2]);
                 viewController.shuffleObjectForward(findScreenPosition(hand), hand);
@@ -47,7 +47,7 @@ $(function(){
                 console.log("negative"+gesture.direction[2]); //towards screen, shuffle backward, go back
                 viewController.shuffleObjectBackward(findScreenPosition(hand), hand);
               }
-              
+
             }
 
             else if(hand.type == "right" && gesture.type == 'swipe'){
@@ -65,7 +65,7 @@ $(function(){
             }
           }
       }
-    } 
+    }
   }
 
   function handleRollPinch(frame){
@@ -101,7 +101,7 @@ $(function(){
         viewController.deselectEverything();
       }
     }
-  }  
+  }
 
   function openGesture(lefthand, righthand) {
     if(!lefthand || !righthand) return false;
@@ -132,7 +132,7 @@ $(function(){
       //Use RightHand to move cursor
       var righthand = null;
       frame.hands[0].type === 'right' ? righthand = frame.hands[0] : righthand = frame.hands[1];
-     
+
       if(righthand){
         //Get position of right hand
         var screenPosition = findScreenPosition(righthand);
@@ -159,7 +159,6 @@ $(function(){
       //                            'lefthand'   : lefthand,
       //                            'righthand'  : righthand });
 
+    }
   }
-}
-
 });

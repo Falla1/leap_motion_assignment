@@ -109,29 +109,18 @@ function Image (imagePath, id) {
     var rect = document.getElementById("workspace-div").getBoundingClientRect();
 
     //every mm = 3px
-    var newLeft = (parseInt(elem.style.left) + movement[0] * 3);
-    var newTop = (parseInt(elem.style.top) - movement[1] * 3);
+    var newXCoord = (parseInt(elem.style.left) + movement[0] * 3);
+    var newTopCoord = (parseInt(elem.style.top) - movement[1] * 3);
 
-    if(newLeft > rect.width -  parseInt(elem.style.width)||
-      newLeft <  1){
-      //do nothing to the x
-    }
-    else{
+    if(newXCoordInBounds(newXCoord, rect)){
       //else, still within the x bound
-      elem.style.left = newLeft + 'px';
+      elem.style.left = newXCoord + 'px';
     }
 
-    if(newTop > rect.height -  parseInt(elem.style.height)||
-      newTop <  1){
-      //do nothing to the y
-    }
-    else{
+    if(newTopCoordInBounds(newTopCoord, rect)){
       //else, still within the y bound
-      elem.style.top = newTop + 'px';
+      elem.style.top = newTopCoord + 'px';
     }
-
-    
-
   }
 
   self.scale = function(previousFrame, leftHand, rightHand){
@@ -149,11 +138,7 @@ function Image (imagePath, id) {
     var newY = parseInt(elem.style.height) + (parseInt(elem.style.height) * scaleY);
     var newX = parseInt(elem.style.width) + (parseInt(elem.style.width) * scaleX);
 
-    if(newY < 30 || newX < 30
-      || newY > 250 || newX > 250){
-      //do nothing.
-    }
-    else {
+    if(scaleWithinBounds({ "newX" : newX, "newY" : newY })){
       elem.style.height = newY  + 'px';
       elem.style.width = newX  + 'px';
     }
@@ -184,5 +169,20 @@ function Image (imagePath, id) {
     newTransform = newTransform + transformToApply;
 
     return newTransform;
+  }
+
+  function newXCoordInBounds(newXCoord, rect){
+    return !(newXCoord > rect.width -  parseInt(elem.style.width)|| 
+      newXCoord <  1);
+  }
+
+  function newTopCoordInBounds(newTopCoord, rect){
+    return !(newTopCoord > rect.height -  parseInt(elem.style.height)||
+      newTopCoord <  1);
+  }
+
+  function scaleWithinBounds(scale){
+    return !(newY < 30 || newX < 30
+      || newY > 250 || newX > 250);
   }
 }
