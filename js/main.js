@@ -7,18 +7,12 @@ $(function(){
 
   var leapController = new Leap.Controller({enableGestures: true}).use('screenPosition', { scale: 1}).connect();
 
-  leapController
-  .on('frame', function(frame){
-
+  leapController.on('frame', function(frame){
     updateCursor(frame);
-
     //Seperated the 'gestures' from the predefined gestures
     //key tap and swipe vs pinch and roll
     handleKeyTapsSwipes(frame);
-
     handleRollPinch(frame);
-
-
   });
 
   function handleKeyTapsSwipes(frame){
@@ -30,40 +24,36 @@ $(function(){
 
       //Only a single hand
       if(handIds.length == 1){
-          var hand = frame.hand(handIds[0]);
-          if(hand.valid){
-            if(hand.type == "right" && gesture.type == 'keyTap'){
-              viewController.selectObject(findScreenPosition(hand));
+        var hand = frame.hand(handIds[0]);
+        if(hand.valid){
+          if(hand.type == "right" && gesture.type == 'keyTap'){
+            viewController.selectObject(findScreenPosition(hand));
+          }
+          else if(hand.type == "right" && gesture.type == 'screenTap'){  //testing can recognize screentap
+            if(gesture.direction[0] > 0){ //towards you, shuffle forward, bring to front
+              console.log("positive"+gesture.direction[2]);
+              viewController.shuffleObjectForward(findScreenPosition(hand), hand);
             }
-
-            else if(hand.type == "right" && gesture.type == 'screenTap'){  //testing can recognize screentap
-              console.log("screentap!");
-
-              if(gesture.direction[0] > 0){ //towards you, shuffle forward, bring to front
-                console.log("positive"+gesture.direction[2]);
-                viewController.shuffleObjectForward(findScreenPosition(hand), hand);
-              }
-              else{
-                console.log("negative"+gesture.direction[2]); //towards screen, shuffle backward, go back
-                viewController.shuffleObjectBackward(findScreenPosition(hand), hand);
-              }
-
-            }
-
-            else if(hand.type == "right" && gesture.type == 'swipe'){
-
-              //Getting Horizontal Direction
-              var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
-                if(isHorizontal){
-                    //Determine the direction of the movement
-                    if(gesture.direction[0] > 0){
-                        viewController.moveImagesToWorkspace();
-                    } else {
-                        viewController.deselectEverything();
-                    }
-                }
+            else{
+              console.log("negative"+gesture.direction[2]); //towards screen, shuffle backward, go back
+              viewController.shuffleObjectBackward(findScreenPosition(hand), hand);
             }
           }
+
+          else if(hand.type == "left" && gesture.type == 'swipe'){
+
+          //Getting Horizontal Direction
+          var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+            if(isHorizontal){
+              //Determine the direction of the movement
+              if(gesture.direction[0] > 0){
+                  viewController.moveImagesToWorkspace();
+              } else {
+                  viewController.deselectEverything();
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -78,26 +68,25 @@ $(function(){
       var righthand = null;
       frame.hands[0].type === 'right' ? righthand = frame.hands[0] : righthand = frame.hands[1];
 
-      //Open up the tab
+      //Open the preview images into the preview pane
       if(!imagesLoaded && openGesture(lefthand, righthand)){
         viewController.loadImages();
         imagesLoaded = !imagesLoaded;
       }
-
+      //Double pinch indicates scale effect
       else if(pinch(lefthand) && pinch(righthand)){
-        //console.log("Double Pinch");
         viewController.scale(leapController.frame(1),lefthand,righthand);
       }
-
+      //Pinch with left hand indicates move effect
       else if(pinch(lefthand)){
-        //console.log("Single Pinch");
         viewController.moveSelected(leapController.frame(1), lefthand);
       }
-      else if(lefthand && (lefthand.roll() > 0.01 || lefthand.roll() < -0.01) && !righthand){
+      //Roll with left indicates rotate
+      else if(lefthand && (lefthand.roll() > 0.01 || lefthand.roll() < -0.01) && 
+                !righthand && handInRotatePosition(lefthand)){
         viewController.rotateSelected(lefthand);
       }
       else if(pinch(righthand) && !lefthand){ //trying right pinch to end roll and scale
-        //console.log("Stopping");
         viewController.deselectEverything();
       }
     }
@@ -122,7 +111,18 @@ $(function(){
     return hand.pinchStrength > 0.8;
   }
 
- function updateCursor(frame){
+  function handInRotatePosition(hand){
+    //Using a 'hang ten' position to differentiate between moving and rotating
+    var thumb       = hand.thumb.extended;
+    var pinky       = hand.pinky.extended;
+    var middle      = hand.middleFinger.extended;
+    var index       = hand.indexFinger.extended;
+    var ringFinger  = hand.ringFinger.extended;
+
+    return (thumb && pinky) && !(middle && index && ringFinger);
+  }
+
+  function updateCursor(frame){
 
     if(frame.hands.length > 0){
 
@@ -154,10 +154,10 @@ $(function(){
                                 'element'   : el });
       }
 
-      // logger.updateLogOutput({ 'coordData'  : coordData,
-      //                            'element'    : el,
-      //                            'lefthand'   : lefthand,
-      //                            'righthand'  : righthand });
+      logger.updateLogOutput({ 'coordData'  : coordData,
+                                 'element'    : el,
+                                 'lefthand'   : lefthand,
+                                 'righthand'  : righthand });
 
     }
   }

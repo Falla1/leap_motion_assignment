@@ -25,6 +25,13 @@ body {
   min-width: 50%;
   height: 30%;
 }
+.photo-folder-icon{
+  float: left;
+  margin: 0% 25% 0% 25%;
+  width: 20%;
+  min-width: 20%;
+  height: 20%;
+}
 .icon-label{
   margin: 0% 10% 0% 10%;
   float: left;

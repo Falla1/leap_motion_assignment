@@ -3,6 +3,7 @@
 function ViewController () {
   var self = this;
   window.cursor = $('#cursor');
+  //Toggle and files for open gesture animation
   var iconToggle = 1;
   var iconFile = { 0 : "icons/open_hands.png",
                    1 : "icons/open_hands_end.png"}
@@ -15,14 +16,11 @@ function ViewController () {
 
   self.loadImages = function() {
     $('#open-icons').hide();
-      // $('#load-buttonWrap').hide(10);
-      $('.image-div').show(300);
-      $('.image-span').show(300);
+    $('.image-div').show(300);
+    $('.image-span').show(300);
   }
 
   self.selectObject = function(position) {
-    // console.log("Selecting at " + position);
-
     //Get the element at the position
     var el = document.elementFromPoint(
       position[0],
@@ -39,9 +37,7 @@ function ViewController () {
           images[id].selectItem();
         }
       }
-
     }
-
   }
 
   self.shuffleObjectForward = function(position, hand) { //used for occlusion
@@ -63,8 +59,6 @@ function ViewController () {
   }
 
   self.moveImagesToWorkspace = function(){
-    // console.log("Moving Selected Images Over");
-
     for(var i = 0 ; i < images.length ; i ++){
       if(images[i].selected && !images[i].onWorkspace){
         images[i].moveToWorkspace();
@@ -90,18 +84,14 @@ function ViewController () {
 
   self.deselectEverything = function(){
     //Firstly, reset everything's opacity
-    for(var i = 0 ; i < images.length ; i ++){
-      if(images[i].onWorkspace){
-        images[i].resetOpacity();
+    images.forEach(function(image){
+      if(image.onWorkspace){
+        image.resetOpacity();
+        if(image.selected){
+          image.selectItem();
+        }
       }
-    }
-
-    // console.log("Deselecting Selected Images");
-    for(var i = 0 ; i < images.length ; i ++){
-      if(images[i].selected){
-        images[i].selectItem();
-      }
-    }
+    });
   }
 
   self.rotateSelected = function(hand){
@@ -120,9 +110,11 @@ function ViewController () {
       top:  y + 'px'
     });
   };
+
   $('#hidebutton').on('click', function() {
     $('#gestureGuide').hide();
   });
+
   window.setInterval(function(){
     $('#openGestureIcon').attr('src', iconFile[iconToggle]);
     iconToggle = Math.abs(1 - iconToggle);
