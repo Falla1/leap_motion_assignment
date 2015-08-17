@@ -26,20 +26,9 @@ $(function(){
       if(handIds.length == 1){
         var hand = frame.hand(handIds[0]);
         if(hand.valid){
-          if(hand.type == "right" && gesture.type == 'keyTap'){
+          if(hand.type == "right" && gesture.type == 'keyTap' ){
             viewController.selectObject(findScreenPosition(hand));
           }
-          else if(hand.type == "right" && gesture.type == 'screenTap'){  //testing can recognize screentap
-            if(gesture.direction[0] > 0){ //towards you, shuffle forward, bring to front
-              console.log("positive"+gesture.direction[2]);
-              viewController.shuffleObjectForward(findScreenPosition(hand), hand);
-            }
-            else{
-              console.log("negative"+gesture.direction[2]); //towards screen, shuffle backward, go back
-              viewController.shuffleObjectBackward(findScreenPosition(hand), hand);
-            }
-          }
-
           else if(hand.type == "left" && gesture.type == 'swipe'){
 
           //Getting Horizontal Direction
@@ -61,6 +50,7 @@ $(function(){
   function handleRollPinch(frame){
 
     if(frame.hands.length > 0){
+
       //Get the objects for the hands
       var lefthand = null;
       frame.hands[0].type === 'left' ? lefthand = frame.hands[0] : lefthand = frame.hands[1];
@@ -78,18 +68,26 @@ $(function(){
         viewController.scale(leapController.frame(1),lefthand,righthand);
       }
       //Pinch with left hand indicates move effect
-      else if(pinch(lefthand)){
+      else if(pinch(lefthand) && !isFist(lefthand)){
         viewController.moveSelected(leapController.frame(1), lefthand);
+      }
+      else if(pitch(righthand) > 1){
+        viewController.shuffleObjectForward(findScreenPosition(righthand), righthand);
+      }
+      else if(pitch(righthand) < -1){
+        viewController.shuffleObjectBackward(findScreenPosition(righthand), righthand);
       }
       //Roll with left indicates rotate
       else if(lefthand && (lefthand.roll() > 0.01 || lefthand.roll() < -0.01) && 
                 !righthand && handInRotatePosition(lefthand)){
         viewController.rotateSelected(lefthand);
       }
-      else if(pinch(righthand) && !lefthand){ //trying right pinch to end roll and scale
-        viewController.deselectEverything();
-      }
     }
+  }
+
+  function isFist(hand){
+    if(!hand) return false;
+    return hand.grabStrength > 0.70;
   }
 
   function openGesture(lefthand, righthand) {
@@ -109,6 +107,11 @@ $(function(){
   function pinch (hand) {
     if(!hand) return false;
     return hand.pinchStrength > 0.8;
+  }
+
+  function pitch (hand) {
+    if(!hand) return false;
+    return hand.pitch();
   }
 
   function handInRotatePosition(hand){

@@ -4,6 +4,7 @@ function Image (imagePath, id) {
   //Information to know about itself
   this.selected = false;
   this.onWorkspace = false;
+  this.imagesOnWorkspace = 0;
   var elemContainer;
   var elem;
 
@@ -12,6 +13,7 @@ function Image (imagePath, id) {
     elemContainer = document.createElement('span');
     elemContainer.setAttribute('class', 'image-span');
     elemContainer.setAttribute('id', 'image-span'+ id);
+    elemContainer.style.zIndex=700;
 
     //Create the image element with the next photo
     elem = document.createElement('img');
@@ -19,6 +21,7 @@ function Image (imagePath, id) {
     elem.setAttribute('class', 'image-thumbnail');
     elem.setAttribute('alt', 'image');
     elem.setAttribute('id', id);
+
 
     //Setting them so we can scale with it
     elem.style.height='100px';
@@ -89,16 +92,12 @@ function Image (imagePath, id) {
 
   }
 
-  self.shuffleForward = function(hand) { //for occlusion
-    elem.style.zIndex="700"; //if screentap value positive then z-index positive
-    console.log("in shuffle method forward");
+  self.getZ = function(){
+    return parseInt(elemContainer.style.zIndex);
   }
 
-  self.shuffleBackward = function(hand) { //for occlusion
-    //elem.style.zIndex="-1"; //if screentap value negative then z-index decreases
-    var d= elem.style.zIndex;
-    elem.style.zIndex=d-1;
-    console.log("in shuffle method backward "+d);
+  self.alterZ = function(value){
+    elemContainer.style.zIndex= parseInt(elemContainer.style.zIndex) + value;
   }
 
   self.moveItem = function(previousFrame, hand) {
@@ -182,7 +181,7 @@ function Image (imagePath, id) {
   }
 
   function scaleWithinBounds(scale){
-    return !(newY < 30 || newX < 30
-      || newY > 250 || newX > 250);
+    return !(scale.newY < 30 || scale.newX < 30
+      || scale.newY > 250 || scale.newX > 250);
   }
 }

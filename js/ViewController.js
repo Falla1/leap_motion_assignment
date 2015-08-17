@@ -32,36 +32,72 @@ function ViewController () {
       if(el.nodeType == 1){
         //It is an image that we tried to select
         if(el.tagName=="IMG"){
-          this.deselectEverything();
           var id = el.getAttribute('id') - 1;
-          images[id].selectItem();
+          if(id != -1){
+            this.deselectEverything();
+            images[id].selectItem();
+          }
         }
       }
     }
   }
 
   self.shuffleObjectForward = function(position, hand) { //used for occlusion
-    for(var i = 0 ; i < images.length ; i ++){
-      if(images[i].selected && images[i].onWorkspace){ //get selected image
-        console.log("testing selected forward");
-        images[i].shuffleForward(hand);
-      }
-    }
+    this.shuffle(1,-1);
   }
 
   self.shuffleObjectBackward = function(position, hand) { //used for occlusion
+    this.shuffle(-1,1);
+  }
+
+  self.shuffle = function(selectDirection,otherDirection){
+
+    var zSelected = -1;
+    var imageSelected = -1;
+    var imageToChange = -1;
+
+    //Loop over the images, add each Z value to array and store the selected images Z
     for(var i = 0 ; i < images.length ; i ++){
-      if(images[i].selected && images[i].onWorkspace){ //get selected image
-        console.log("testing selected back");
-        images[i].shuffleBackward(hand);
+      if(images[i].selected && images[i].onWorkspace){ 
+        zSelected = images[i].getZ();
+        imageSelected = i;
       }
     }
+    //If we didnt find the selected image.
+    if(zSelected == -1){
+      return;
+    }
+
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].onWorkspace && images[i].getZ() == zSelected + selectDirection){
+        imageToChange = i;
+      }
+    }
+    //If we cant find the next element.
+    //Ie..Maybe its the lowest Z 
+    if(imageToChange == -1){
+      return;
+    }
+    //Telling the image to move itself accordingly.
+    images[imageToChange].alterZ(otherDirection);
+    images[imageSelected].alterZ(selectDirection);
   }
 
   self.moveImagesToWorkspace = function(){
     for(var i = 0 ; i < images.length ; i ++){
       if(images[i].selected && !images[i].onWorkspace){
+        //Making the Z, one less, then moving image over
+        this.decrementZOfAll();
         images[i].moveToWorkspace();
+      }
+    }
+  }
+
+  //Decreasing the Z of every image
+  self.decrementZOfAll = function(){
+    for(var i = 0 ; i < images.length ; i ++){
+      if(images[i].onWorkspace){
+        images[i].alterZ(-1);
       }
     }
   }
