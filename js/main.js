@@ -88,7 +88,7 @@ $(function(){
         }
       }
       //Roll with left indicates rotate
-      else if(lefthand && (lefthand.roll() > 0.01 || lefthand.roll() < -0.01) && 
+      else if(lefthand && (lefthand.roll() > 0.01 || lefthand.roll() < -0.01) &&
                 !righthand && handInRotatePosition(lefthand)){
         viewController.rotateSelected(lefthand);
       }
@@ -167,16 +167,14 @@ $(function(){
           );
           cursor.show();
         }
-
         viewController.render({ 'coordData' : coordData,
                                 'element'   : el });
       }
-
-      logger.updateLogOutput({ 'coordData'  : coordData,
-                                 'element'    : el,
-                                 'lefthand'   : lefthand,
-                                 'righthand'  : righthand });
-
+      //Uncomment to enable on screen logging
+      // logger.updateLogOutput({ 'coordData'  : coordData,
+      //                            'element'    : el,
+      //                            'lefthand'   : lefthand,
+      //                            'righthand'  : righthand });
     }
   }
 });

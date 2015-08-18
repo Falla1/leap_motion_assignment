@@ -40,8 +40,6 @@ function Image (imagePath, id) {
     }
     else{
       elem.style.border='1px solid #E8272C';
-
-      // console.log("Deselecting Selected Images");
       for(var i = 0 ; i < images.length ; i ++){
         if(!images[i].selected && images[i].onWorkspace && this.onWorkspace){
           images[i].lowerOpacity();
@@ -69,7 +67,6 @@ function Image (imagePath, id) {
 
     var box = workspace.getBoundingClientRect();
     //Randomizing the position that we put each image.
-
     var minX = box.left;
     var minY = box.top;
 
@@ -104,12 +101,10 @@ function Image (imagePath, id) {
     var newTopCoord = (parseInt(elem.style.top) - movement[1] * 3);
 
     if(newXCoordInBounds(newXCoord, rect)){
-      //else, still within the x bound
       elem.style.left = newXCoord + 'px';
     }
 
     if(newTopCoordInBounds(newTopCoord, rect)){
-      //else, still within the y bound
       elem.style.top = newTopCoord + 'px';
     }
   }
@@ -183,7 +178,7 @@ function Image (imagePath, id) {
   }
 
   function newXCoordInBounds(newXCoord, rect){
-    return !(newXCoord > rect.width -  parseInt(elem.style.width)|| 
+    return !(newXCoord > rect.width -  parseInt(elem.style.width)||
       newXCoord <  1);
   }
 
