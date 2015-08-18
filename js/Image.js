@@ -67,11 +67,8 @@ function Image (imagePath, id) {
     //Change the parent from image-div to workspace
     workspace.appendChild(elemContainer);
 
-    box = { 'left':  0, 'top': 0};
-    box = workspace.getBoundingClientRect();
+    var box = workspace.getBoundingClientRect();
     //Randomizing the position that we put each image.
-    //Unsure if need, because I can't get translating to work without
-    //setting to absolute position, but should try dragula
 
     var minX = box.left;
     var minY = box.top;
@@ -83,13 +80,8 @@ function Image (imagePath, id) {
     elemContainer.style.position = 'absolute';
 
     elem.style.position = 'absolute';
-    elem.style.left = Math.floor(Math.random() * ((maxX / 2) - 0)) + 0 + 'px';
-    elem.style.top = Math.floor(Math.random() * ((maxY / 2) - 0)) + 0 + 'px';
-
-    //testing purposes
-    // elem.style.left = 10 + 'px';
-    // elem.style.top = 10 + 'px';
-
+    elem.style.left = Math.floor(Math.random() * ((maxX / 2) - 100)) + 0 + 'px';
+    elem.style.top = Math.floor(Math.random() * ((maxY / 2) - 100)) + 0 + 'px';
   }
 
   self.getZ = function(){
@@ -147,7 +139,27 @@ function Image (imagePath, id) {
     var position = hand.screenPosition();
     var rotation = hand.roll();
 
-    elem.style.transform = this.getNewTransform('rotate','rotate(' + -rotation + 'rad)');
+    var currentRotation = 0.0;
+    var newRotation = 1;
+
+    if(elem.style.transform){
+      //Getting the rotation amount
+     currentRotation = parseFloat(elem.style.transform.split("(")[1].split("rad")[0]);
+    }
+
+    if(rotation < -0.1){
+      newRotation = currentRotation + .03;
+    }
+    else if(rotation > 0.1){
+      newRotation = currentRotation - .03;
+    }
+    else{
+      //The hand is not tilted enough
+      //Therefore do nothing.
+      return;
+    }
+
+    elem.style.transform = this.getNewTransform('rotate','rotate(' + newRotation + 'rad)');
 
     elem.style.webkitTransform = elem.style.MozTransform = elem.style.msTransform =
     elem.style.OTransform = elem.style.transform;

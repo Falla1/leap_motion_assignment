@@ -68,6 +68,7 @@ function ViewController () {
       return;
     }
 
+    //Getting the element that we have to swap with.
     for(var i = 0 ; i < images.length ; i ++){
       if(images[i].onWorkspace && images[i].getZ() == zSelected + selectDirection){
         imageToChange = i;

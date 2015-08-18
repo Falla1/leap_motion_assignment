@@ -4,6 +4,7 @@ $(function(){
   var logger = new LeapLogger();
   var imagesLoaded = false;
   var imagesMovedWorkSpace = false;
+  var pitchedPrevious = false;
 
   var leapController = new Leap.Controller({enableGestures: true}).use('screenPosition', { scale: 1}).connect();
 
@@ -72,15 +73,28 @@ $(function(){
         viewController.moveSelected(leapController.frame(1), lefthand);
       }
       else if(pitch(righthand) > 1){
-        viewController.shuffleObjectForward(findScreenPosition(righthand), righthand);
+        //Checking the pitch, so each pitch is equal to only one movement
+        if(!pitchedPrevious){
+          viewController.shuffleObjectForward(findScreenPosition(righthand), righthand);
+          pitchedPrevious = true;
+        }
       }
-      else if(pitch(righthand) < -1){
-        viewController.shuffleObjectBackward(findScreenPosition(righthand), righthand);
+      //Negative pitch value means the hand is hard for the leap to pick up
+      //Therefore, using -0.8 instead of 1 to make it less pitch.
+      else if(pitch(righthand) < -0.8){
+        if(!pitchedPrevious){
+          viewController.shuffleObjectBackward(findScreenPosition(righthand), righthand);
+          pitchedPrevious = true;
+        }
       }
       //Roll with left indicates rotate
       else if(lefthand && (lefthand.roll() > 0.01 || lefthand.roll() < -0.01) && 
                 !righthand && handInRotatePosition(lefthand)){
         viewController.rotateSelected(lefthand);
+      }
+      else{
+        //Setting it to false, therefore the leap is picking up we have left the 'pitch' position
+        pitchedPrevious = false;
       }
     }
   }
@@ -111,6 +125,7 @@ $(function(){
 
   function pitch (hand) {
     if(!hand) return false;
+    console.log(hand.pitch());
     return hand.pitch();
   }
 
